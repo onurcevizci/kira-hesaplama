@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kira Döviz Hesaplayıcı</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+
+    .container {
+      background: #1f2937;
+      padding: 25px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      background: #374151;
+      color: white;
+      outline: none;
+    }
+
+    input:focus {
+      border: 2px solid #2563eb;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .result {
+      margin-top: 25px;
+      background: #374151;
+      padding: 18px;
+      border-radius: 15px;
+      line-height: 2;
+      font-size: 16px;
+      word-break: break-word;
+    }
+
+    .highlight {
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      input {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 13px;
+      }
+
+      .result {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Kira Döviz Hesaplayıcı</h1>
+
+  <label for="usd">Dolar Kuru (TL)</label>
+  <input type="number" inputmode="decimal" id="usd" step="0.01" value="45.60">
+
+  <label for="stg">STG Kuru (TL)</label>
+  <input type="number" inputmode="decimal" id="stg" step="0.01" value="61.13">
+
+  <label for="rent">Kira (STG)</label>
+  <input type="number" inputmode="numeric" id="rent" value="450">
+
+  <label for="paidTl">TL Olarak Ödenen</label>
+  <input type="number" inputmode="numeric" id="paidTl" value="15000">
+
+  <button id="calcBtn">Hesapla</button>
+
+  <div class="result" id="result">
+    Sonuç yükleniyor...
+  </div>
+</div>
+
+<script>
+function hesapla() {
+    const usd = Number(document.getElementById('usd').value) || 0;
+    const stg = Number(document.getElementById('stg').value) || 0;
+    const rent = Number(document.getElementById('rent').value) || 0;
+    const paidTl = Number(document.getElementById('paidTl').value) || 0;
+
+    const totalTl = rent * stg;
+    const remainingTl = totalTl - paidTl;
+    const remainingUsd = remainingTl / usd;
+
+    document.getElementById('result').innerHTML = `
+      <div>Toplam kira TL karşılığı:<br><span class="highlight">${totalTl.toFixed(2)} TL</span></div>
+      <br>
+      <div>Kalan TL borcu:<br><span class="highlight">${remainingTl.toFixed(2)} TL</span></div>
+      <br>
+      <div>Dolar olarak ödemen gereken:<br><span class="highlight">${remainingUsd.toFixed(2)} USD</span></div>
+    `;
+}
+
+window.addEventListener('load', function () {
+    document.getElementById('calcBtn').addEventListener('click', hesapla);
+    hesapla();
+});
+</script>
+
+</body>
+</html>
