@@ -3,67 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kira Döviz Hesaplayıcı</title>
+  <meta name="theme-color" content="#111827">
+  <title>Kira Döviz Hesaplayıcı Pro</title>
+
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: Arial, sans-serif;
-      background: #111827;
-      color: white;
+      background: linear-gradient(135deg, #111827, #1e3a8a);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
       padding: 15px;
+      color: white;
     }
 
     .container {
-      background: #1f2937;
-      padding: 25px;
-      border-radius: 20px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      max-width: 450px;
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      opacity: 0.7;
+      margin-bottom: 25px;
+      font-size: 14px;
     }
 
     label {
       display: block;
       margin-top: 15px;
       margin-bottom: 8px;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: none;
-      font-size: 16px;
-      background: #374151;
+      background: rgba(255,255,255,0.12);
       color: white;
+      font-size: 16px;
       outline: none;
     }
 
-    input:focus {
-      border: 2px solid #2563eb;
+    option {
+      color: black;
+    }
+
+    input::placeholder {
+      color: rgba(255,255,255,0.6);
     }
 
     button {
       width: 100%;
       margin-top: 25px;
       padding: 15px;
+      border-radius: 14px;
       border: none;
-      border-radius: 12px;
       background: #2563eb;
       color: white;
       font-size: 18px;
@@ -73,46 +89,46 @@
     }
 
     button:hover {
+      transform: scale(1.02);
       background: #1d4ed8;
     }
 
     .result {
       margin-top: 25px;
-      background: #374151;
-      padding: 18px;
-      border-radius: 15px;
+      background: rgba(255,255,255,0.08);
+      padding: 20px;
+      border-radius: 18px;
       line-height: 2;
-      font-size: 16px;
-      word-break: break-word;
     }
 
     .highlight {
       color: #22c55e;
       font-weight: bold;
+      font-size: 20px;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px;
-        border-radius: 15px;
-      }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
 
+    .mini-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    @media(max-width:480px){
       h1 {
         font-size: 24px;
       }
 
-      input {
-        padding: 12px;
-        font-size: 15px;
-      }
-
-      button {
-        font-size: 16px;
-        padding: 13px;
-      }
-
-      .result {
-        font-size: 15px;
+      .container {
+        padding: 20px;
       }
     }
   </style>
@@ -120,51 +136,96 @@
 <body>
 
 <div class="container">
-  <h1>Kira Döviz Hesaplayıcı</h1>
 
-  <label for="usd">Dolar Kuru (TL)</label>
-  <input type="number" inputmode="decimal" id="usd" step="0.01" value="45.60">
+  <div class="topbar">
+    <button class="mini-btn" onclick="temaDegistir()">🌙 Tema</button>
+    <button class="mini-btn" onclick="kurGetir()">💱 Canlı Kur</button>
+  </div>
 
-  <label for="stg">STG Kuru (TL)</label>
-  <input type="number" inputmode="decimal" id="stg" step="0.01" value="61.13">
+  <h1>Kira Hesaplayıcı Pro</h1>
+  <div class="subtitle">USD / STG / TL hesap sistemi</div>
 
-  <label for="rent">Kira (STG)</label>
-  <input type="number" inputmode="numeric" id="rent" value="450">
+  <label>Dolar Kuru (TL)</label>
+  <input type="number" id="usd" step="0.01" value="45.60">
 
-  <label for="paidTl">TL Olarak Ödenen</label>
-  <input type="number" inputmode="numeric" id="paidTl" value="15000">
+  <label>STG Kuru (TL)</label>
+  <input type="number" id="stg" step="0.01" value="61.13">
 
-  <button id="calcBtn">Hesapla</button>
+  <label>Kira (STG)</label>
+  <input type="number" id="rent" value="450">
+
+  <label>TL Olarak Verilen</label>
+  <input type="number" id="paidTl" value="15000">
+
+  <button onclick="hesapla()">Hesapla</button>
 
   <div class="result" id="result">
-    Sonuç yükleniyor...
+    Hesap sonucu burada görünecek...
   </div>
+
 </div>
 
 <script>
 function hesapla() {
-    const usd = Number(document.getElementById('usd').value) || 0;
-    const stg = Number(document.getElementById('stg').value) || 0;
-    const rent = Number(document.getElementById('rent').value) || 0;
-    const paidTl = Number(document.getElementById('paidTl').value) || 0;
+  const usd = parseFloat(document.getElementById('usd').value) || 0;
+  const stg = parseFloat(document.getElementById('stg').value) || 0;
+  const rent = parseFloat(document.getElementById('rent').value) || 0;
+  const paidTl = parseFloat(document.getElementById('paidTl').value) || 0;
 
-    const totalTl = rent * stg;
-    const remainingTl = totalTl - paidTl;
-    const remainingUsd = remainingTl / usd;
+  const totalTl = rent * stg;
+  const remainingTl = totalTl - paidTl;
+  const remainingUsd = remainingTl / usd;
 
-    document.getElementById('result').innerHTML = `
-      <div>Toplam kira TL karşılığı:<br><span class="highlight">${totalTl.toFixed(2)} TL</span></div>
-      <br>
-      <div>Kalan TL borcu:<br><span class="highlight">${remainingTl.toFixed(2)} TL</span></div>
-      <br>
-      <div>Dolar olarak ödemen gereken:<br><span class="highlight">${remainingUsd.toFixed(2)} USD</span></div>
-    `;
+  document.getElementById('result').innerHTML = `
+    <div>🏠 Toplam kira:</div>
+    <div class="highlight">${totalTl.toFixed(2)} TL</div>
+
+    <br>
+
+    <div>💸 Kalan borç:</div>
+    <div class="highlight">${remainingTl.toFixed(2)} TL</div>
+
+    <br>
+
+    <div>💵 USD olarak:</div>
+    <div class="highlight">${remainingUsd.toFixed(2)} USD</div>
+  `;
 }
 
-window.addEventListener('load', function () {
-    document.getElementById('calcBtn').addEventListener('click', hesapla);
+async function kurGetir() {
+  try {
+    const response = await fetch('https://open.er-api.com/v6/latest/USD');
+    const data = await response.json();
+
+    const usdTry = data.rates.TRY;
+    const gbpTry = usdTry / data.rates.GBP;
+
+    document.getElementById('usd').value = usdTry.toFixed(2);
+    document.getElementById('stg').value = gbpTry.toFixed(2);
+
     hesapla();
-});
+
+    alert('Canlı kurlar güncellendi');
+  } catch (e) {
+    alert('Kur alınamadı');
+  }
+}
+
+function temaDegistir() {
+  if(document.body.style.background.includes('white')) {
+    document.body.style.background = 'linear-gradient(135deg, #111827, #1e3a8a)';
+    document.body.style.color = 'white';
+  } else {
+    document.body.style.background = '#f3f4f6';
+    document.body.style.color = 'black';
+  }
+}
+
+hesapla();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 
 </body>
